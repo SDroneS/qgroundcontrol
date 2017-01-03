@@ -33,7 +33,7 @@ class MissionManager : public QObject
 public:
     MissionManager(Vehicle* vehicle);
     ~MissionManager();
-    
+
     bool inProgress(void);
     const QList<MissionItem*>& missionItems(void) { return _missionItems; }
     int currentItem(void) { return _currentMissionItem; }
