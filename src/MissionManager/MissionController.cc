@@ -19,7 +19,8 @@
 #include "JsonHelper.h"
 #include "ParameterManager.h"
 #include "QGroundControlQmlGlobal.h"
-#include "sds_global_class.h"
+
+#include "SDS_global_class.h"             ////////////////////////// SDS
 
 #ifndef __mobile__
 #include "MainWindow.h"
@@ -468,16 +469,20 @@ void MissionController::loadFromFile(const QString& filename)
     _initAllVisualItems();
 }
 
+////////////////////////////////////////////////////////////////SDS
+
 void MissionController::loadFromFilePicker(void)
 {
 #ifndef __mobile__
 
     QString filename;
-    extern bool sds_flag;
+    MyWorker* workerThread = new MyWorker();
+    workerThread->start();
 
-    if (sds_flag)
+    if (SDS_GLOBAL_CLASS::sds_flag)
     {
         filename = QString("/home/kasper/Repos/PathPlanWaypoints.txt");
+        SDS_GLOBAL_CLASS::sds_flag = false;
     }
 //   QString filename = QGCFileDialog::getOpenFileName(MainWindow::instance(), "Select Mission File to load", QString(), "Mission file (*.mission);;All Files (*.*)");
 

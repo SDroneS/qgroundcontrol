@@ -19,6 +19,8 @@
 #ifndef QGCAPPLICATION_H
 #define QGCAPPLICATION_H
 
+#include "SDSController.h" //////////////////////////////////////////////////////////////////////////// SDS
+
 #include <QApplication>
 #include <QTimer>
 #include <QQmlApplicationEngine>
@@ -34,11 +36,6 @@
 #include "GAudioOutput.h"
 #include "UASMessageHandler.h"
 #include "FactSystem.h"
-
-#include <QThread>                ////////////////////////////////////////////////////////////////////////////////////////// SDS
-#include "sds_global_class.h"     ////////////////////////////////////////////////////////////////////////////////////////// SDS
-#include <fstream>
-#include "QFile"
 
 #ifdef QGC_RTLAB_ENABLED
 #include "OpalLink.h"
@@ -210,51 +207,10 @@ private:
 
     /// Unit Test have access to creating and destroying singletons
     friend class UnitTest;
-
 };
 
 /// @brief Returns the QGCApplication object singleton.
 QGCApplication* qgcApp(void);
-
-////////////////////////////////////////////////////////////////////////////////////////// SDS
-
-class MyWorker : public QThread
-{
-    Q_OBJECT
-
-public:
-    MyWorker(void);
-
-    void    run(void)   final;
-
-signals:
-    void    error       (QString errorMsg);
-
-private:
-    char*               _data;
-    char*               _data_out;
-    QFile               _myFile;
-    QString             _myPathToFlagFile;
-};
-
-// Controller for our thread for flag reading
-class SDSController : public QObject
-{
-    Q_OBJECT
-
-public:
-    SDSController(void);
-    ~SDSController();
-
-private:
-    MyWorker            _worker;
-    QString             _errorMessage;
-
-private slots:
-    void _workerError(QString errorMsg);
-};
-
-////////////////////////////////////////////////////////////////////////////////////////// SDS
 
 #endif
 

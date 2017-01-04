@@ -5,11 +5,8 @@
 class SDS_GLOBAL_CLASS
 {
 public:
+    //SDS_GLOBAL_CLASS();
     static bool sds_flag;
-public:
-    SDS_GLOBAL_CLASS();
 };
-
-bool SDS_GLOBAL_CLASS::sds_flag = false;
 
 #endif // SDS_GLOBAL_CLASS_H

@@ -339,12 +339,15 @@ HEADERS += \
     src/api/QGCCorePlugin.h \
     src/api/QGCOptions.h \
     src/api/QGCSettings.h \
-    src/sds_global_class.h
+    src/SDSController.h \
+    src/SDS_global_class.h
 
 SOURCES += \
     src/api/QGCCorePlugin.cc \
     src/api/QGCOptions.cc \
-    src/api/QGCSettings.cc
+    src/api/QGCSettings.cc \
+    src/SDSController.cpp \
+    src/SDS_global_class.cpp
 
 #
 # Unit Test specific configuration goes here (requires full debug build with all plugins)
