@@ -338,10 +338,6 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
     _toolbox = new QGCToolbox(this);
     _toolbox->setChildToolboxes();
 
-    //////////////////////////////////////////////////////////////////////////// SDS
-    //MyWorker* workerThread = new MyWorker();
-    //workerThread->start();
-    //SDSController myThread();
 }
 
 QGCApplication::~QGCApplication()

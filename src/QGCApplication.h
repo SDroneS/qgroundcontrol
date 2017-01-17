@@ -19,8 +19,6 @@
 #ifndef QGCAPPLICATION_H
 #define QGCAPPLICATION_H
 
-#include "SDSController.h" //////////////////////////////////////////////////////////////////////////// SDS
-
 #include <QApplication>
 #include <QTimer>
 #include <QQmlApplicationEngine>

@@ -1,11 +1,10 @@
 #ifndef SDSCONTROLLER_H
 #define SDSCONTROLLER_H
 
+#include <QMessageBox>
 #include <QThread>
-
-#include "SDS_global_class.h"
-
 #include <fstream>
+#include <QTextStream>
 #include "QFile"
 
 class MyWorker : public QThread
@@ -13,36 +12,18 @@ class MyWorker : public QThread
     Q_OBJECT
 
 public:
-    //MyWorker(void);
-
     void    run(void)   final;
 
 signals:
-    void    error       (QString errorMsg);
+    void    showMyMsg   (QString myMsg);
+    void    loadWPTs    (QString workerPathToWPTsFile);
+    void    workerResult(bool myReturn);
 
 private:
-    char*               _data;
-    char*               _data_out;
-    //QFile               _myFile;
+    QString             _data;
+    QString             _data_out;
     QString             _myPathToFlagFile;
-};
-
-// Controller for our thread for flag reading
-class SDSController : public QObject
-{
-    Q_OBJECT
-
-public:
-    SDSController(void);
-    ~SDSController();
-    MyWorker* workerThread;
-
-private:
-    MyWorker            _worker;
-    QString             _errorMessage;
-
-private slots:
-    void _workerError(QString errorMsg);
+    QString             _myPathToWPTsFile;
 };
 
 #endif // SDSCONTROLLER_H

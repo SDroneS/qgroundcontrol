@@ -42,6 +42,7 @@ QGCView {
         onShowErrorMessage: {
             showMessage(qsTr("Parameter Load Errors"), errorMsg, StandardButton.Ok)
         }
+
     }
 
     QGCViewPanel {
@@ -112,6 +113,7 @@ QGCView {
                         }
                     }
                 }
+
                 MenuSeparator { visible: _showRCToParam }
                 MenuItem {
                     text:           qsTr("Clear RC to Param")

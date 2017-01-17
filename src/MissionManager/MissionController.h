@@ -18,6 +18,8 @@
 #include "MavlinkQmlSingleton.h"
 #include "VisualMissionItem.h"
 
+#include "SDSController.h"      ////////////////////////////////////// SDS
+
 #include <QHash>
 
 class CoordinateVector;
@@ -88,9 +90,12 @@ public:
     void setCruiseDistance          (double cruiseDistance );
     void setHoverDistance           (double hoverDistance );
 
-    static const char* jsonSimpleItemsKey;  ///< Key for simple items in a json file
+    static const char* jsonSimpleItemsKey;  ///< Key for simple items in a json file 
+
+    MyWorker* workerThread;                 ////////////////////////////////////////////////// SDS
 
 signals:
+
     void plannedHomePositionChanged(QGeoCoordinate plannedHomePosition);
     void visualItemsChanged(void);
     void complexVisualItemsChanged(void);
@@ -111,6 +116,12 @@ private slots:
     void _recalcWaypointLines(void);
     void _recalcAltitudeRangeBearing(void);
     void _homeCoordinateChanged(void);
+
+public slots:
+    void _startFlagChecking(void);                       //////////////////////////////////// SDS
+    void _workerloadWPTs(QString PathToWPTsFile);        //////////////////////////////////// SDS
+    void _workerMsg(QString myMsg);                      //////////////////////////////////// SDS
+    void _workerResult(bool myResult);                   //////////////////////////////////// SDS
 
 private:
     void _recalcSequence(void);
@@ -153,6 +164,11 @@ private:
     static const char*  _jsonMavAutopilotKey;
     static const char*  _jsonComplexItemsKey;
     static const char*  _jsonPlannedHomePositionKey;
+
+////////////////////////////////////////////////////////////// SDS
+    MyWorker            _worker;
+    QMessageBox         _myMsgBox;
+    bool                _sdsIsRunning;
 };
 
 #endif

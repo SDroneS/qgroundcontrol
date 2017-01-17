@@ -1192,6 +1192,17 @@ QGCView {
                         qgcView.showDialog(removeAllPromptDialog, qsTr("Remove all"), qgcView.showDialogDefaultWidth, StandardButton.Yes | StandardButton.No)
                     }
                 }
+
+                /////////////////////////////////////////////////////////// SDS
+                QGCButton {
+                    text:               qsTr("SDS Flag Checking")
+                    Layout.fillWidth:   true
+                    onClicked: {
+                        syncButton.hideDropDown()
+                        _syncDropDownController._startFlagChecking()
+                    }
+                }
+                /////////////////////////////////////////////////////////// SDS
             }
         }
     }

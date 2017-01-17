@@ -1,48 +1,48 @@
 #include "SDSController.h"
 
-SDSController::SDSController(void)
-{
-    //MyWorker* workerThread = new MyWorker();
-    ///workerThread = new MyWorker();
-    //connect(&_worker, &MyWorker::error, this, &SDSController::_workerError);
-    ///workerThread->start();
-}
-
-SDSController::~SDSController(void)
-{
-
-}
-
-void SDSController::_workerError(QString errorMessage)
-{
-    _errorMessage = errorMessage;
-}
-
 void MyWorker::run(void)
 {
-    //Setting Flag File Path
+    // Setting Flag File path
     _myPathToFlagFile = "/home/kasper/Repos/SDS_Flag.cfg";
     QFile _myFile(_myPathToFlagFile);
-    *_data_out = '0';
-
-    while (true)
+    if(!_myFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-       // Reading Flag File
-       if(_myFile.canReadLine())
-       {
-          _myFile.readLine(_data, 2);
+       emit showMyMsg(tr("Cannot open the SDS flag file!"));
+       emit workerResult(false);
+        return;
+    }
 
-          // While Flag value is set to 1
-          if(*_data == '1')
-          {
-              SDS_GLOBAL_CLASS::sds_flag = true;
-              _myFile.write(_data_out);
-          }
-       }
-       else
+    // Setting Flight Paln File path
+    _myPathToWPTsFile = "/home/kasper/Repos/PathPlanWaypoints.txt";
+    QFile _myWPTsFile(_myPathToWPTsFile);
+
+    // Default value for flag file which is set after flag reading
+    _data_out = "0";
+
+    QTextStream in(&_myFile);
+    QTextStream out(&_myFile);
+
+    // Reading SDS flag file thread loop
+    while (true)       //(!in.atEnd())
+    {
+       // While Flag value is set to 1
+       if(in.readLine(1) == "1")
        {
-          emit error(tr("Cannot read the SDS flag file!"));
-           return;
+           // While WPTs file doesn't exist
+           if(!_myWPTsFile.exists())
+           {
+                emit showMyMsg(tr("Cannot open the SDS WPTs file!"));
+                emit workerResult(false);
+                 return;
+           }
+
+           // Setting SDS flag file value to default
+           _myFile.resize(0);
+           out << _data_out;
+
+           // Loading the SDS WPTs file to autopilot
+           emit loadWPTs(_myPathToWPTsFile);
        }
+       usleep(100000);
     }
 }

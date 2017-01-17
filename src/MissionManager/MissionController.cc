@@ -20,8 +20,6 @@
 #include "ParameterManager.h"
 #include "QGroundControlQmlGlobal.h"
 
-#include "SDS_global_class.h"             ////////////////////////// SDS
-
 #ifndef __mobile__
 #include "MainWindow.h"
 #include "QGCFileDialog.h"
@@ -469,22 +467,10 @@ void MissionController::loadFromFile(const QString& filename)
     _initAllVisualItems();
 }
 
-////////////////////////////////////////////////////////////////SDS
-
 void MissionController::loadFromFilePicker(void)
 {
 #ifndef __mobile__
-
-    QString filename;
-    MyWorker* workerThread = new MyWorker();
-    workerThread->start();
-
-    if (SDS_GLOBAL_CLASS::sds_flag)
-    {
-        filename = QString("/home/kasper/Repos/PathPlanWaypoints.txt");
-        SDS_GLOBAL_CLASS::sds_flag = false;
-    }
-//   QString filename = QGCFileDialog::getOpenFileName(MainWindow::instance(), "Select Mission File to load", QString(), "Mission file (*.mission);;All Files (*.*)");
+    QString filename = QGCFileDialog::getOpenFileName(MainWindow::instance(), "Select Mission File to load", QString(), "Mission file (*.mission);;All Files (*.*)");
 
     if (filename.isEmpty()) {
         return;
@@ -1287,7 +1273,6 @@ bool MissionController::dirty(void) const
     return _visualItems ? _visualItems->dirty() : false;
 }
 
-
 void MissionController::setDirty(bool dirty)
 {
     if (_visualItems) {
@@ -1316,4 +1301,53 @@ void MissionController::_homeCoordinateChanged(void)
 QString MissionController::fileExtension(void) const
 {
     return QGCApplication::missionFileExtension;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////// SDS
+void MissionController::_startFlagChecking()
+{
+#ifndef __mobile__
+
+    // If SDS thread is not running -> start the thread
+    if(!_sdsIsRunning)
+    {
+        // Confirm the user action
+        _workerMsg(tr("The SDS flag status monitoring is ON"));
+
+        // Start the SDS thread
+        connect(&_worker, &MyWorker::showMyMsg, this, &MissionController::_workerMsg);
+        connect(&_worker, &MyWorker::workerResult, this, &MissionController::_workerResult);
+        connect(&_worker, &MyWorker::loadWPTs, this , &MissionController::_workerloadWPTs);
+        _worker.start();
+        _sdsIsRunning = true;
+    }
+    // If SDS thread is currently running -> stop the thread
+    else
+    {
+        // Confirm the user action
+        _workerMsg(tr("The SDS flag status monitoring is OFF"));
+
+        // Stop the SDS thread
+        _worker.exit();
+        _sdsIsRunning = false;
+    }
+
+#endif
+}
+
+void MissionController::_workerloadWPTs(QString PathToWPTsFile)
+{
+    loadFromFile(PathToWPTsFile);
+}
+
+void MissionController::_workerMsg(QString myMsg)
+{
+    // Show a message to user
+    _myMsgBox.setText(myMsg);
+    _myMsgBox.exec();
+}
+
+void MissionController::_workerResult(bool myResult)
+{
+    _sdsIsRunning = myResult;
 }
