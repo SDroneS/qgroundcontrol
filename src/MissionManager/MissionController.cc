@@ -1338,6 +1338,7 @@ void MissionController::_startFlagChecking()
 void MissionController::_workerloadWPTs(QString PathToWPTsFile)
 {
     loadFromFile(PathToWPTsFile);
+    sendToVehicle();
 }
 
 void MissionController::_workerMsg(QString myMsg)
