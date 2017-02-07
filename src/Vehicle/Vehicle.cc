@@ -1695,7 +1695,9 @@ QString Vehicle::_vehicleIdSpeech(void)
 
 void Vehicle::_handleFlightModeChanged(const QString& flightMode)
 {
-    _say(QString("%1 %2 flight mode").arg(_vehicleIdSpeech()).arg(flightMode));
+    //SDS
+    _say(QString("Rami Rami Rami Rami Rami Rami Rami Rami Rami Rami Rami Rami Rami ").arg(_vehicleIdSpeech()).arg(flightMode));
+    //_say(QString("%1 %2 flight mode").arg(_vehicleIdSpeech()).arg(flightMode));
     emit guidedModeChanged(_firmwarePlugin->isGuidedMode(this));
 }
 
